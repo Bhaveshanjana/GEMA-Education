@@ -1,73 +1,105 @@
-# React + TypeScript + Vite
+# Student Assessment Report Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React-based frontend assignment designed to display student speaking assessment results. It features dynamic score conversions (IELTS, TOEFL, PTE, etc.), visual data representation, and logic-based descriptive feedback.
 
-Currently, two official plugins are available:
+## How to Run the Project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1.  **Clone the repository or download zip:**
 
-## React Compiler
+    ```bash
+    git clone <your-repo-link>
+    cd <project-folder-name>
+    unzip the downloaded zip
+    cd <unziped location>
+    ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2.  **Install dependencies:**
 
-## Expanding the ESLint configuration
+    ```bash
+    npm install
+    ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3.  **Start the development server:**
+    ```bash
+    npm run dev
+    # or
+    npm start
+    ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Folder Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+├── components/
+│   ├── FeedBack.tsx       # Displays descriptive feedback based on scores
+│   ├── ScoreSummary.tsx   # Main dashboard showing the score circle and bars
+│   ├── SkillBar.tsx       # Reusable progress bar component for individual skills
+│   └── scoreTabs.tsx      # Tab navigation for exam types
+├── constants/
+│   └── scoreScale.ts      # Definitions for exam scales (IELTS max 9, TOEFL max 120, etc.)
+├── types/
+│   └── ReportData.ts      # TypeScript interfaces for the student data structure
+├── utils/
+│   └── scoreConverter.ts  # Logic to convert raw scores into different exam formats
+├── App.tsx                # Entry point of app
+└── report.json            # The data source containing student scores
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Example Data Structure (report.json):
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+{
+  "studentName": "John Doe",
+  "overallScore": 5,
+  "skills": {
+    "pronunciation": { "score": 7 },
+    "fluency": { "score": 8 },
+    "vocabulary": { "score": 2 },
+    "grammar": { "score": 1 }
+  }
+}
+```
+
+### How the Logic Works
+
+#### 1. Feedback Logic
+
+- The feedback text in FeedBack.tsx is generated dynamically based on specific score ranges. It does not rely on static text from the database.
+
+- Condition Rules:
+
+- Score ≥ 8: Returns "Excellent performance with strong control."
+
+- Score 6 - 7: Returns "Good performance with minor inaccuracies."
+
+- Score < 6: Returns "Needs improvement."
+
+This logic ensures that if a student's score changes in the JSON, the descriptive text updates automatically to match.
+
+#### 2. Score Conversion Logic
+
+- The application can convert the base score (out of 9) into other exam formats (IELTS, TOEFL, PTE, etc.) using the scoreConverter.ts utility.
+
+- It uses a standard ratio calculation: (BaseScore / 9) \* MaxScore of Target Exam.
+
+- Example: A score of 5/9 in SpeechAce converts to approximately 67/120 in TOEFL.
+
+CEFR Exception: CEFR scores are mapped to levels (A2, B1, B2, C1, C2) based on fixed thresholds rather than mathematical division.
+
+#### 3. Dynamic Coloring
+
+- In ScoreSummary.tsx, the main score circle changes color based on performance:
+
+- Green: High scores (≥ 80%)
+
+- Yellow: Average scores (60% - 79%)
+
+- Red: Low scores (< 60%)
+
+### Tech Stack
+
+Framework: React-TypeScript
+
+Styling: Tailwind CSS
