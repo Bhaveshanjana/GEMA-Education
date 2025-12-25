@@ -1,5 +1,3 @@
-// src/types/ReportData.ts
-
 export type SkillData = {
     score: number;
     description: string;
@@ -8,9 +6,9 @@ export type SkillData = {
 export type ReportData = {
     studentName: string;
     overallScore: number;
-    overallDescription: string; // Added this
+    overallDescription: string;
     skills: {
-        pronunciation: SkillData; // Changed from number to SkillData
+        pronunciation: SkillData;
         fluency: SkillData;
         vocabulary: SkillData;
         grammar: SkillData;
