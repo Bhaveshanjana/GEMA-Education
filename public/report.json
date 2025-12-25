@@ -1,0 +1,18 @@
+{
+  "studentName": "John Doe",
+  "overallScore": 5,
+  "skills": {
+    "pronunciation": {
+      "score": 7 
+    },
+    "fluency": {
+      "score": 8
+    },
+    "vocabulary": {
+      "score": 2
+    },
+    "grammar": {
+      "score": 1
+    }
+  }
+}
